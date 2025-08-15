@@ -1,6 +1,7 @@
 /* 
  * This file is part of the Echo Web Application Framework (hereinafter "Echo").
  * Copyright (C) 2002-2009 NextApp, Inc.
+ * Copyright (C) 2010-2025 Stéphane Cachat
  *
  * Version: MPL 1.1/GPL 2.0/LGPL 2.1
  *
@@ -26,7 +27,6 @@
  * the provisions above, a recipient may use your version of this file under
  * the terms of any one of the MPL, the GPL or the LGPL.
  */
-
 package nextapp.echo.webcontainer;
 
 import java.util.HashMap;
@@ -35,56 +35,62 @@ import java.util.Map;
 import nextapp.echo.app.Component;
 import nextapp.echo.app.util.PeerFactory;
 
-
 /**
  * Factory for obtaining <code>XXXSynchronizePeer</code> implementations.
  */
 public class SynchronizePeerFactory {
 
-    /** Resource location of synchronization peer. */
+    /**
+     * Resource location of synchronization peer.
+     */
     private static final String RESOURCE_NAME = "META-INF/nextapp/echo/SynchronizePeerBindings.properties";
-    
-    /** Peer factory for retrieving synchronization peers. */
-    private static final PeerFactory peerFactory 
+
+    /**
+     * Peer factory for retrieving synchronization peers.
+     */
+    private static final PeerFactory peerFactory
             = new PeerFactory(RESOURCE_NAME, Thread.currentThread().getContextClassLoader());
 
-    /** Peer factory for retrieving synchronization peers. */
-    private static final Map<Class, ComponentSynchronizePeer> peerRegistry = new HashMap<Class, ComponentSynchronizePeer>();
+    /**
+     * Peer factory for retrieving synchronization peers.
+     */
+    private static final Map<Class, ComponentSynchronizePeer> peerRegistry = new HashMap<>();
 
     /**
      * Non-instantiable class.
      */
-    private SynchronizePeerFactory() { }
-    
+    private SynchronizePeerFactory() {
+    }
+
     /**
-     * Retrieves the appropriate <code>CommandSynchronizePeer</code> for a given 
+     * Retrieves the appropriate <code>CommandSynchronizePeer</code> for a given
      * <code>Command</code> class.
-     * 
+     *
      * @param commandClass the command class
      * @return the appropriate <code>CommandSynchronizePeer</code>
      */
     public static CommandSynchronizePeer getPeerForCommand(Class commandClass) {
         return (CommandSynchronizePeer) peerFactory.getPeerForObject(commandClass, true);
     }
-    
+
     /**
-     * Retrieves the appropriate <code>ComponentSynchronizePeer</code> for a given 
-     * <code>Component</code> class.
-     * 
+     * Retrieves the appropriate <code>ComponentSynchronizePeer</code> for a
+     * given <code>Component</code> class.
+     *
      * @param componentClass the component class
      * @return the appropriate <code>ComponentSynchronizePeer</code>
      */
     public static ComponentSynchronizePeer getPeerForComponent(Class componentClass) {
         return getPeerForComponent(componentClass, true);
     }
-    
+
     /**
-     * Retrieves the appropriate <code>ComponentSynchronizePeer</code> for a given 
-     * <code>Component</code> class.
-     * 
+     * Retrieves the appropriate <code>ComponentSynchronizePeer</code> for a
+     * given <code>Component</code> class.
+     *
      * @param componentClass the component class
-     * @param searchSuperClasses flag indicating whether peers for superclasses should be returned if none
-     *        can be found for the exact class.
+     * @param searchSuperClasses flag indicating whether peers for superclasses
+     * should be returned if none can be found for the exact class.
      * @return the appropriate <code>ComponentSynchronizePeer</code>
      */
     public static ComponentSynchronizePeer getPeerForComponent(Class componentClass, boolean searchSuperClasses) {
@@ -94,11 +100,11 @@ public class SynchronizePeerFactory {
         }
         return peer;
     }
-    
+
     /**
-     * Register manually a peer for a given component class
-     * Peers do not have to be registered in SynchronizePeerBindings.properties
-     * 
+     * Register manually a peer for a given component class Peers do not have to
+     * be registered in SynchronizePeerBindings.properties
+     *
      * @param componentClass the component class
      * @param peer the peer corresponding to the component class
      */
