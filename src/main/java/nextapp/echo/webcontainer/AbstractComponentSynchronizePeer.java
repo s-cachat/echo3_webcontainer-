@@ -224,6 +224,7 @@ implements ComponentSynchronizePeer {
     /**
      * Adds a non-indexed output property.  
      * 
+     * @param propertyName
      * @see #addOutputProperty(java.lang.String, boolean)
      */
     public void addOutputProperty(String propertyName) {
@@ -268,6 +269,7 @@ implements ComponentSynchronizePeer {
      * 
      * @return the (most basic) supported component class
      */
+    @Override
     public abstract Class getComponentClass();
     
     /**
@@ -276,6 +278,7 @@ implements ComponentSynchronizePeer {
      * 
      * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getEventDataClass(java.lang.String)
      */
+    @Override
     public Class getEventDataClass(String eventType) {
         if (eventTypeToEventPeer == null) {
             return null;
@@ -292,6 +295,7 @@ implements ComponentSynchronizePeer {
      * 
      * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getEventTypes(Context, Component)
      */
+    @Override
     public Iterator getEventTypes(Context context, Component component) {
         if (eventTypeToEventPeer == null) {
             return Collections.EMPTY_SET.iterator();
@@ -307,6 +311,7 @@ implements ComponentSynchronizePeer {
      * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getOutputProperty(nextapp.echo.app.util.Context,
      *      nextapp.echo.app.Component, java.lang.String, int)
      */
+    @Override
     public Object getOutputProperty(Context context, Component component, String propertyName, int propertyIndex) {
         if (propertyIndex == -1) {
             return component.getLocalStyle().get(propertyName);
