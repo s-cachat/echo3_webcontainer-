@@ -40,6 +40,7 @@ public class SelectFieldPeer extends AbstractListComponentPeer {
     /**
      * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getClientComponentType(boolean)
      */
+    @Override
     public String getClientComponentType(boolean mode) {
         return mode ? "RSF" : "SelectField";
     }
@@ -47,6 +48,7 @@ public class SelectFieldPeer extends AbstractListComponentPeer {
     /**
      * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getComponentClass()
      */
+    @Override
     public Class getComponentClass() {
         return SelectField.class;
     }

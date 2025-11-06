@@ -42,6 +42,7 @@ public final class ComponentPeer extends AbstractComponentSynchronizePeer {
     /**
      * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getClientComponentType(boolean)
      */
+    @Override
     public String getClientComponentType(boolean mode) {
         return "Component";
     }
@@ -49,6 +50,7 @@ public final class ComponentPeer extends AbstractComponentSynchronizePeer {
     /**
      * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getComponentClass()
      */
+    @Override
     public Class getComponentClass() {
         return Component.class;
     }

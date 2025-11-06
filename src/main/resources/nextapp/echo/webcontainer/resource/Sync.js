@@ -60,6 +60,11 @@ Echo.Sync = {
         if (font) {
             Echo.Sync.Font.render(font, element);
         }
+	var transition=component.render("transition");
+	if (transition){
+            element.style.transition = transition;
+	}
+
         if (component.getLayoutDirection()) {
             element.dir = component.getLayoutDirection().isLeftToRight() ? "ltr" : "rtl";
         }
