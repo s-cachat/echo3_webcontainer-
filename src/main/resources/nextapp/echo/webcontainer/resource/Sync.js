@@ -64,7 +64,16 @@ Echo.Sync = {
 	if (transition){
             element.style.transition = transition;
 	}
-
+	var cssClass=component.render("cssClass");
+	if (cssClass){
+            element.style.classList.add(cssClass);
+	}
+	var customCss=component.render("customCss");
+	if (customCss){
+            
+            console.log("TODO custom css",customCss);s
+	}
+        
         if (component.getLayoutDirection()) {
             element.dir = component.getLayoutDirection().isLeftToRight() ? "ltr" : "rtl";
         }
