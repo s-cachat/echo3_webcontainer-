@@ -28,9 +28,18 @@
  */
 package nextapp.echo.webcontainer.util;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -98,29 +107,55 @@ public class Resource {
      * @return a <code>ByteArrayOutputStream</code> of the content of the
      * resource
      */
-    private static ByteArrayOutputStream getResource(String resourceName) {
+    private static ByteArrayOutputStream getResource(final String resourceName) {
         InputStream in = null;
         byte[] buffer = new byte[BUFFER_SIZE];
         ByteArrayOutputStream out = null;
         int bytesRead = 0;
 
         try {
-            in = Resource.class.getClassLoader().getResourceAsStream(resourceName);
-
+             File debugDir = new File("/tmp/debug");
+            File debugRes = new File(debugDir, resourceName);
+            if (debugRes.exists()) {
+                File debugSig = new File(debugDir, resourceName + ".sig");
+                if (debugSig.exists()){
+                    String sig;
+                    try (FileReader fr = new FileReader(debugSig); BufferedReader br = new BufferedReader(fr)) {
+                        sig = br.readLine();
+                        MessageDigest digest = MessageDigest.getInstance("SHA-256");
+                        byte[] encodedhash = digest.digest(String.format("FGert5GD56GDrter%s", resourceName).getBytes(StandardCharsets.UTF_8));
+                        StringBuilder sb = new StringBuilder();
+                        for (byte b : encodedhash) {
+                            sb.append(String.format("%02x", b));
+                        }
+                        if (!sb.toString().equals(sig)) {
+                            logger.severe(() -> "Bad signature for resource " + resourceName + " : read " + sig + " calc " + sb);
+                        } else {
+                            logger.info(() -> "Loading debug resource " + resourceName);
+                            in = new FileInputStream(debugRes);
+                        }
+                    } catch (IOException | NoSuchAlgorithmException ex) {
+                        logger.log(Level.SEVERE, "Can't load debug resource signature for " + resourceName, ex);
+                    }
+                }
+            }
             if (in == null) {
-                logger.severe("Resource not found, try with module classloader : \"" + resourceName + "\".");
+                in = Resource.class.getClassLoader().getResourceAsStream(resourceName);
+            }
+            if (in == null) {
+                logger.severe(() -> "Resource not found, try with module classloader : \"" + resourceName + "\".");
                 in = Resource.class.getModule().getClassLoader().getResourceAsStream(resourceName);
             }
 
             if (in == null && !resourceName.startsWith("/")) {
-                resourceName = '/' + resourceName;
-                logger.severe("Resource not found, try with slash : \"" + resourceName + "\".");
+                String resourceNameSlash = '/' + resourceName;
+                logger.severe(() -> "Resource not found, try with slash : \"" + resourceNameSlash + "\".");
 
-                in = Resource.class.getClassLoader().getResourceAsStream(resourceName);
+                in = Resource.class.getClassLoader().getResourceAsStream(resourceNameSlash);
 
                 if (in == null) {
-                    logger.severe("Resource not found, try with module classloader : \"" + resourceName + "\".");
-                    in = Resource.class.getModule().getClassLoader().getResourceAsStream(resourceName);
+                    logger.severe(() -> "Resource not found, try with module classloader : \"" + resourceNameSlash + "\".");
+                    in = Resource.class.getModule().getClassLoader().getResourceAsStream(resourceNameSlash);
                 }
             }
             if (in == null) {

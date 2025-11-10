@@ -157,6 +157,10 @@ Echo.Sync.TextComponent = Core.extend(Echo.Render.ComponentSync, {
         if (toolTipText) {
             this.input.title = toolTipText;
         }
+        var placeholder = this.component.render("placeholder");
+        if (placeholder) {
+            this.input.placeholder = placeholder;
+        }
     },
     
     /**

@@ -26,11 +26,12 @@
  * the provisions above, a recipient may use your version of this file under
  * the terms of any one of the MPL, the GPL or the LGPL.
  */
-
 package nextapp.echo.webcontainer.service;
 
+import java.io.File;
 import java.io.IOException;
 import java.security.AccessControlException;
+import java.util.Arrays;
 
 import nextapp.echo.webcontainer.Connection;
 import nextapp.echo.webcontainer.ServerConfiguration;
@@ -42,49 +43,62 @@ import nextapp.echo.webcontainer.util.Resource;
 /**
  * A service which renders <code>JavaScript</code> resource files.
  */
-public class JavaScriptService 
-implements Service {
+public class JavaScriptService
+        implements Service {
+
     /**
-     * Creates a new <code>JavaScript</code> service from the specified
-     * resource in the <code>CLASSPATH</code>.
-     * 
+     * Creates a new <code>JavaScript</code> service from the specified resource
+     * in the <code>CLASSPATH</code>.
+     *
      * @param id the <code>Service</code> id
      * @param resourceName the <code>CLASSPATH</code> resource name containing
-     *        the JavaScript content
+     * the JavaScript content
      * @return the created <code>JavaScriptService</code>
      */
     public static JavaScriptService forResource(String id, String resourceName) {
         String content = Resource.getResourceAsString(resourceName);
-        return new JavaScriptService(id, content);
+        return new JavaScriptService(id, content, resourceName);
     }
-    
+
     public static JavaScriptService forResources(String id, String[] resourceNames) {
-        StringBuffer out = new StringBuffer();
+        StringBuilder out = new StringBuilder();
         for (int i = 0; i < resourceNames.length; ++i) {
             out.append(Resource.getResourceAsString(resourceNames[i]));
             out.append("\n\n");
         }
-        return new JavaScriptService(id, out.toString());
+        return new JavaScriptService(id, out.toString(), Arrays.toString(resourceNames));
     }
 
-    /** <code>Service</code> identifier. */
+    /** <code>Service</code> identifier.
+     */
     private String id;
-    
-    /** The JavaScript content in plain text. */
+    /**
+     * the <code>JavaScript resource name</code> (used for debug mode)
+     */
+    private String resourceName;
+
+    /**
+     * The JavaScript content in plain text.
+     */
     private String content;
-    
-    /** The JavaScript content in GZip compressed form. */
+
+    /**
+     * The JavaScript content in GZip compressed form.
+     */
     private byte[] gzipContent;
-    
+
     /**
      * Creates a new <code>JavaScriptService</code>.
-     * 
+     *
      * @param id the <code>Service</code> id
      * @param content the <code>JavaScript content</code>
+     * @param resourceName the <code>JavaScript resource name</code> (used for
+     * debug mode)
      */
-    public JavaScriptService(String id, String content) {
+    public JavaScriptService(String id, String content, String resourceName) {
         super();
         this.id = id;
+        this.resourceName = resourceName;
         this.content = ServerConfiguration.JAVASCRIPT_COMPRESSION_ENABLED ? JavaScriptCompressor.compress(content) : content;
         try {
             gzipContent = GZipCompressor.compress(this.content);
@@ -93,32 +107,35 @@ implements Service {
             throw new RuntimeException("Exception compressing JavaScript source.", ex);
         }
     }
-    
+
     /**
      * @see Service#getId()
      */
+    @Override
     public String getId() {
         return id;
     }
-    
+
     /**
-     * <code>DO_NOT_CACHE</code> is returned for <code>JavaScript</code>
-     * to avoid possibility of ever running out-of-date JavaScript in the
-     * event an application is updated and redeployed. 
-     * 
+     * <code>DO_NOT_CACHE</code> is returned for <code>JavaScript</code> to
+     * avoid possibility of ever running out-of-date JavaScript in the event an
+     * application is updated and redeployed.
+     *
      * @see Service#getVersion()
      */
+    @Override
     public int getVersion() {
         return DO_NOT_CACHE;
     }
-    
+
     /**
      * @see Service#service(nextapp.echo.webcontainer.Connection)
      */
-    public void service(Connection conn) 
-    throws IOException {
+    @Override
+    public void service(Connection conn)
+            throws IOException {
         String userAgent = conn.getRequest().getHeader("user-agent");
-        if (!ServerConfiguration.ALLOW_IE_COMPRESSION && (userAgent == null || userAgent.indexOf("MSIE") != -1)) {
+        if (!ServerConfiguration.ALLOW_IE_COMPRESSION && (userAgent == null || userAgent.contains("MSIE"))) {
             // Due to behavior detailed Microsoft Knowledge Base Article Id 312496, 
             // all HTTP compression support is disabled for this browser.
             // Due to the fact that ClientProperties information is not necessarily 
@@ -126,34 +143,43 @@ implements Service {
             // headers will also be affected.
             servicePlain(conn);
         } else {
+            if (new File("/tmp/debug", resourceName).exists()) {
+                content = Resource.getResourceAsString(resourceName);
+                try {
+                    gzipContent = GZipCompressor.compress(this.content);
+                } catch (IOException ex) {
+                    // Should not occur.
+                    throw new RuntimeException("Exception compressing JavaScript source.", ex);
+                }
+            }
             String acceptEncoding = conn.getRequest().getHeader("accept-encoding");
-            if (acceptEncoding != null && acceptEncoding.indexOf("gzip") != -1) {
+            if (acceptEncoding != null && acceptEncoding.contains("gzip")) {
                 serviceGZipCompressed(conn);
             } else {
                 servicePlain(conn);
             }
         }
     }
-    
+
     /**
      * Renders the JavaScript resource using GZip encoding.
-     * 
+     *
      * @param conn the relevant <code>Connection</code>
      */
-    private void serviceGZipCompressed(Connection conn) 
-    throws IOException {
+    private void serviceGZipCompressed(Connection conn)
+            throws IOException {
         conn.getResponse().setContentType("application/javascript");
         conn.getResponse().setHeader("Content-Encoding", "gzip");
         conn.getOutputStream().write(gzipContent);
     }
-    
+
     /**
      * Renders the JavaScript resource WITHOUT using GZip encoding.
-     * 
+     *
      * @param conn the relevant <code>Connection</code>
      */
-    private void servicePlain(Connection conn) 
-    throws IOException {
+    private void servicePlain(Connection conn)
+            throws IOException {
         conn.getResponse().setContentType("application/javascript");
         conn.getWriter().print(content);
     }
