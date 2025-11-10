@@ -591,6 +591,7 @@ class OutputProcessor {
         } else if (propertyDataElement != null) {
             // Set non-null property value (if necessary, i.e., if propertyDataElement is set).
             // Obtain appropriate peer.
+
             SerialPropertyPeer propertySyncPeer = propertyPeerFactory.getPeerForProperty(propertyValue.getClass());
             if (propertySyncPeer == null) {
                 // Unsupported property: do nothing.

@@ -39,6 +39,7 @@ public class ButtonPeer extends AbstractButtonPeer {
     /**
      * @see nextapp.echo.webcontainer.sync.component.AbstractButtonPeer#getClientComponentType(boolean)
      */
+    @Override
     public String getClientComponentType(boolean mode) {
         return mode ? "B" : "Button";
     }
@@ -46,6 +47,7 @@ public class ButtonPeer extends AbstractButtonPeer {
     /**
      * @see nextapp.echo.webcontainer.AbstractComponentSynchronizePeer#getComponentClass()
      */
+    @Override
     public Class getComponentClass() {
         return Button.class;
     }

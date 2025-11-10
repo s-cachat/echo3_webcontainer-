@@ -39,6 +39,7 @@ public class RowPeer extends AbstractArrayContainerSynchronizePeer {
     /**
      * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getClientComponentType(boolean)
      */
+    @Override
     public String getClientComponentType(boolean mode) {
         return mode ? "R" : "Row";
     }
@@ -46,6 +47,7 @@ public class RowPeer extends AbstractArrayContainerSynchronizePeer {
     /**
      * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getComponentClass()
      */
+    @Override
     public Class getComponentClass() {
         return Row.class;
     }

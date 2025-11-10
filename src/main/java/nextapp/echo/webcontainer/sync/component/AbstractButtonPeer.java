@@ -58,6 +58,7 @@ public class AbstractButtonPeer extends AbstractComponentSynchronizePeer {
         super();
         
         addEvent(new AbstractComponentSynchronizePeer.EventPeer("action", AbstractButton.ACTION_LISTENERS_CHANGED_PROPERTY) {
+            @Override
             public boolean hasListeners(Context context, Component component) {
                 return ((AbstractButton) component).hasActionListeners();
             }
@@ -67,6 +68,7 @@ public class AbstractButtonPeer extends AbstractComponentSynchronizePeer {
     /**
      * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getClientComponentType(boolean)
      */
+    @Override
     public String getClientComponentType(boolean mode) {
         return mode ? "AB" : "AbstractButton";
     }
@@ -74,6 +76,7 @@ public class AbstractButtonPeer extends AbstractComponentSynchronizePeer {
     /**
      * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#getComponentClass()
      */
+    @Override
     public Class getComponentClass() {
         return AbstractButton.class;
     }
@@ -81,6 +84,7 @@ public class AbstractButtonPeer extends AbstractComponentSynchronizePeer {
     /**
      * @see nextapp.echo.webcontainer.ComponentSynchronizePeer#init(Context, Component)
      */
+    @Override
     public void init(Context context, Component component) {
         super.init(context, component);
         ServerMessage serverMessage = (ServerMessage) context.get(ServerMessage.class);
