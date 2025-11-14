@@ -64,6 +64,10 @@ Echo.Sync = {
 	if (transition){
             element.style.transition = transition;
 	}
+	var textTransform=component.render("textTransform");
+	if (textTransform){
+            element.style.textTransform = textTransform;
+	}
 	var cssClass=component.render("cssClass");
 	if (cssClass){
             element.style.classList.add(cssClass);
