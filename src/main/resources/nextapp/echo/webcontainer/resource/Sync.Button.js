@@ -578,8 +578,8 @@ Echo.Sync.Button.ContentContainer = Core.extend({
                 // Leading to trailing.
                 this._addColumn(trDiv, this._cellElements[0]);
                 for (i = 1; i < this._cellElements.length; i++) {
-                    this._addColumn(trDiv, this._cellElements[i]);
                     this._addColumn(trDiv, this._marginCellElement);
+                    this._addColumn(trDiv, this._cellElements[i]);
                 }
             }
             this._tableDiv.appendChild(trDiv);
