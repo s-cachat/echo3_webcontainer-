@@ -10,7 +10,7 @@
 /**
  * @namespace
  */
-Echo.Sync = { 
+Echo.Sync = {
 
     /**
      * Retrieves an "effect-specific" property from a component (e.g., a rollover background) if it
@@ -26,7 +26,7 @@ Echo.Sync = {
      * @param defaultEffectPropertyValue (optional) the default effect property value (this value will be returned if the
      *        effectState is true and no value has been specifically set for the effect property) 
      */
-    getEffectProperty: function(component, defaultPropertyName, effectPropertyName, effectState,
+    getEffectProperty: function (component, defaultPropertyName, effectPropertyName, effectState,
             defaultDefaultPropertyValue, effectDefaultPropertyValue) {
         var property;
         if (effectState) {
@@ -37,7 +37,7 @@ Echo.Sync = {
         }
         return property;
     },
-    
+
     /**
      * Renders component foreground, background, font, and layout direction properties
      * (if each is provided) to the specified element.  This is a performance/convenience method
@@ -46,7 +46,7 @@ Echo.Sync = {
      * @param {Echo.Component} component the component
      * @param {Element} element the target element
      */
-    renderComponentDefaults: function(component, element) {
+    renderComponentDefaults: function (component, element) {
         var color;
         if ((color = component.render("foreground"))) {
             color = Echo.Sync.Color.toTransparent(color);
@@ -60,24 +60,25 @@ Echo.Sync = {
         if (font) {
             Echo.Sync.Font.render(font, element);
         }
-	var transition=component.render("transition");
-	if (transition){
+        var transition = component.render("transition");
+        if (transition) {
             element.style.transition = transition;
-	}
-	var textTransform=component.render("textTransform");
-	if (textTransform){
+        }
+        var textTransform = component.render("textTransform");
+        if (textTransform) {
             element.style.textTransform = textTransform;
-	}
-	var cssClass=component.render("cssClass");
-	if (cssClass){
+        }
+        var cssClass = component.render("cssClass");
+        if (cssClass) {
             element.style.classList.add(cssClass);
-	}
-	var customCss=component.render("customCss");
-	if (customCss){
-            
-            console.log("TODO custom css",customCss);s
-	}
-        
+        }
+        var customCss = component.render("customCss");
+        if (customCss) {
+
+            console.log("TODO custom css", customCss);
+            s
+        }
+
         if (component.getLayoutDirection()) {
             element.dir = component.getLayoutDirection().isLeftToRight() ? "ltr" : "rtl";
         }
@@ -90,8 +91,8 @@ Echo.Sync = {
  */
 Echo.Sync.Alignment = {
 
-    _HORIZONTALS: { left: true, center: true, right: true, leading: true, trailing: true },
-    _VERTICALS: { top: true, middle: true, bottom: true },
+    _HORIZONTALS: {left: true, center: true, right: true, leading: true, trailing: true},
+    _VERTICALS: {top: true, middle: true, bottom: true},
 
     /**
      * Returns the render-able horizontal component of an alignment property.  This method
@@ -103,26 +104,26 @@ Echo.Sync.Alignment = {
      * @return the rendered horizontal component, i.e., "left", "center", "right", or null
      * @type String
      */
-    getRenderedHorizontal: function(alignment, layoutDirectionProvider) {
+    getRenderedHorizontal: function (alignment, layoutDirectionProvider) {
         if (alignment == null) {
             return null;
         }
-    
-        var layoutDirection = layoutDirectionProvider ? 
+
+        var layoutDirection = layoutDirectionProvider ?
                 layoutDirectionProvider.getRenderLayoutDirection() : Echo.LayoutDirection.LTR;
-         
-        var horizontal = typeof(alignment) == "object" ? alignment.horizontal : alignment; 
-                
+
+        var horizontal = typeof (alignment) == "object" ? alignment.horizontal : alignment;
+
         switch (horizontal) {
-        case "leading":
-            return layoutDirection.isLeftToRight() ? "left" : "right";
-        case "trailing":
-            return layoutDirection.isLeftToRight() ? "right" : "left";
-        default:
-            return horizontal in this._HORIZONTALS ? horizontal : null;
+            case "leading":
+                return layoutDirection.isLeftToRight() ? "left" : "right";
+            case "trailing":
+                return layoutDirection.isLeftToRight() ? "right" : "left";
+            default:
+                return horizontal in this._HORIZONTALS ? horizontal : null;
         }
     },
-    
+
     /**
      * Returns the horizontal component of an alignment property.
      * 
@@ -130,11 +131,11 @@ Echo.Sync.Alignment = {
      * @return the horizontal component, i.e., "left", "center", "right", "leading", "trailing", or null
      * @type String
      */
-    getHorizontal: function(alignment) {
+    getHorizontal: function (alignment) {
         if (alignment == null) {
             return null;
         }
-        if (typeof(alignment == "string")) {
+        if (typeof (alignment == "string")) {
             return alignment in this._HORIZONTALS ? alignment : null;
         } else {
             return alignment.horizontal;
@@ -148,11 +149,11 @@ Echo.Sync.Alignment = {
      * @return the vertical component, i.e., "top", "middle", "bottom", or null 
      * @type String
      */
-    getVertical: function(alignment) {
+    getVertical: function (alignment) {
         if (alignment == null) {
             return null;
         }
-        if (typeof(alignment == "string")) {
+        if (typeof (alignment == "string")) {
             return alignment in this._VERTICALS ? alignment : null;
         } else {
             return alignment.vertical;
@@ -169,29 +170,45 @@ Echo.Sync.Alignment = {
      * @param layoutDirectionProvider an (optional) object providing a getRenderLayoutDirection() method to determine if the
      *        element has a layout direction of left-to-right or right-to-left
      */
-    render: function(alignment, element, renderToElement, layoutDirectionProvider) {
+    render: function (alignment, element, renderToElement, layoutDirectionProvider) {
         if (alignment == null) {
             return;
         }
-        
+
         var horizontal = Echo.Sync.Alignment.getRenderedHorizontal(alignment, layoutDirectionProvider);
-        var vertical = typeof(alignment) == "object" ? alignment.vertical : alignment;
-    
+        var vertical = typeof (alignment) == "object" ? alignment.vertical : alignment;
+
         var horizontalValue;
         switch (horizontal) {
-        case "left":   horizontalValue = "left";   break;
-        case "center": horizontalValue = "center"; break;
-        case "right":  horizontalValue = "right";  break;
-        default:       horizontalValue = "";       break;
+            case "left":
+                horizontalValue = "left";
+                break;
+            case "center":
+                horizontalValue = "center";
+                break;
+            case "right":
+                horizontalValue = "right";
+                break;
+            default:
+                horizontalValue = "";
+                break;
         }
         var verticalValue;
         switch (vertical) {
-        case "top":    verticalValue = "top";      break;
-        case "middle": verticalValue = "middle";   break;
-        case "bottom": verticalValue = "bottom";   break;
-        default:       verticalValue = "";         break;
+            case "top":
+                verticalValue = "top";
+                break;
+            case "middle":
+                verticalValue = "middle";
+                break;
+            case "bottom":
+                verticalValue = "bottom";
+                break;
+            default:
+                verticalValue = "";
+                break;
         }
-        
+
         if (renderToElement) {
             element.align = horizontalValue;
             element.vAlign = verticalValue;
@@ -213,7 +230,7 @@ Echo.Sync.Border = {
      * Supports omission of any term, or empty strings.
      * @type RegExp
      */
-    _PARSER_PX: new RegExp("^(-?\\d+px)?(?:^|$|(?= )) ?(none|hidden|dotted|dashed|solid|" + 
+    _PARSER_PX: new RegExp("^(-?\\d+px)?(?:^|$|(?= )) ?(none|hidden|dotted|dashed|solid|" +
             "double|groove|ridge|inset|outset)?(?:^|$|(?= )) ?(#[0-9a-fA-F]{6})?$"),
 
     /**
@@ -223,13 +240,13 @@ Echo.Sync.Border = {
      */
     _PARSER: new RegExp("^(-?\\d+(?:\\.\\d*)?(?:px|pt|pc|cm|mm|in|em|ex))?(?:^|$|(?= )) ?(none|hidden|dotted|dashed|solid|" +
             "double|groove|ridge|inset|outset)?(?:^|$|(?= )) ?(#[0-9a-fA-F]{6})?$"),
-            
+
     /** 
      * Regular expression to test whether an extent string is a properly formatted integer pixel value.
      * @type RegExp 
      */
     _TEST_EXTENT_PX: /^-?\d+px$/,
-    
+
     /**
      * Creates a border property from a size, style, and color.
      * 
@@ -239,7 +256,7 @@ Echo.Sync.Border = {
      * @return a border object
      * @type #Border
      */
-    compose: function(size, style, color) {
+    compose: function (size, style, color) {
         if (typeof size == "number") {
             size += "px";
         }
@@ -255,7 +272,7 @@ Echo.Sync.Border = {
         }
         return out.join(" ");
     },
-    
+
     /** 
      * Determines if a border is multisided.
      * 
@@ -263,25 +280,25 @@ Echo.Sync.Border = {
      * @return true if the border is multisided
      * @type Boolean
      */
-    isMultisided: function(border) {
+    isMultisided: function (border) {
         return (border && (border.top || border.bottom || border.left || border.right)) ? true : false;
     },
-    
+
     /**
      * Parses a border into size, style, and color components.
      * 
      * @param {#Border} border the border to parse
      * @return an object containing size, style, and color properties of the border
      */
-    parse: function(border) {
+    parse: function (border) {
         if (!border) {
             // Return an empty object if border evaluates false.
-            return { };
+            return {};
         }
-        if (typeof(border) == "string") {
+        if (typeof (border) == "string") {
             // Parse the border.
             var parts = this._PARSER.exec(border);
-            return { size: parts[1], style: parts[2], color: parts[3] };
+            return {size: parts[1], style: parts[2], color: parts[3]};
         } else {
             // Parse an individual border side.
             return Echo.Sync.Border.parse(border.top || border.right || border.bottom || border.left);
@@ -295,12 +312,12 @@ Echo.Sync.Border = {
      * @param {Element} the target DOM element
      * @param {String} styleAttribute the CSS style attribute name (defaults to "border" if omitted)
      */
-    render: function(border, element, styleAttribute) {
+    render: function (border, element, styleAttribute) {
         if (!border) {
             return;
         }
         styleAttribute = styleAttribute ? styleAttribute : "border";
-        if (typeof(border) == "string") {
+        if (typeof (border) == "string") {
             if (this._PARSER_PX.test(border)) {
                 element.style[styleAttribute] = border;
             } else {
@@ -308,7 +325,7 @@ Echo.Sync.Border = {
                 if (elements == null) {
                     throw new Error("Invalid border: \"" + border + "\"");
                 }
-                this.render(Echo.Sync.Extent.toPixels(elements[1]) + "px " + elements[2] + " " + elements[3], 
+                this.render(Echo.Sync.Extent.toPixels(elements[1]) + "px " + elements[2] + " " + elements[3],
                         element, styleAttribute);
             }
         } else {
@@ -322,10 +339,10 @@ Echo.Sync.Border = {
             if (border.left !== null) {
                 this.render(border.left || border.right || border.top, element, styleAttribute + "Left");
             }
-            
+
         }
     },
-    
+
     /**
      * Renders a border to a DOM element, clearing an existing border if the border value is null.
      * 
@@ -333,7 +350,7 @@ Echo.Sync.Border = {
      * @param {Element} the target DOM element
      * @param {String} styleAttribute the CSS style attribute name (defaults to "border" if omitted)
      */
-    renderClear: function(border, element) {
+    renderClear: function (border, element) {
         if (border) {
             if (border instanceof Object) {
                 element.style.border = "";
@@ -352,12 +369,12 @@ Echo.Sync.Border = {
      * @return the border size in pixels
      * @type Number
      */
-    getPixelSize: function(border, sideName) {
+    getPixelSize: function (border, sideName) {
         if (!border) {
             return 0;
         }
-        
-        if (typeof(border) == "string") {
+
+        if (typeof (border) == "string") {
             var extent = this._PARSER.exec(border)[1];
             if (extent == null) {
                 return 0;
@@ -366,22 +383,22 @@ Echo.Sync.Border = {
             } else {
                 return Echo.Sync.Extent.toPixels(extent);
             }
-        } else if (typeof(border) == "object") {
+        } else if (typeof (border) == "object") {
             // Retrieve value for individual side.
             // Specified side is queried first, followed by alternatives.
             while (true) {
                 var side = this.getPixelSize(border[sideName]);
                 if (side == null) {
                     switch (sideName) {
-                    case "left": 
-                        // If left side specified but value null, try again with right.
-                        sideName = "right"; 
-                        continue;
-                    case "right":
-                    case "bottom": 
-                        // If bottom or right side specified, try again with top.
-                        sideName = "top";
-                        continue; 
+                        case "left":
+                            // If left side specified but value null, try again with right.
+                            sideName = "right";
+                            continue;
+                        case "right":
+                        case "bottom":
+                            // If bottom or right side specified, try again with top.
+                            sideName = "top";
+                            continue;
                     }
                 }
                 return side;
@@ -395,18 +412,18 @@ Echo.Sync.Border = {
  * @class
  */
 Echo.Sync.BoxShadow = Core.extend({
-  
+
     $static: {
         STYLE_DEFAULT: "DEFAULT",
         STYLE_INSET: "INSET",
-      
+
         /**
          * Renders a border to a DOM element.
          * 
          * @param {#BoxShadow} border the box shadow to render
          * @param {Element} the target DOM element
          */
-        render: function(boxShadow, element) {
+        render: function (boxShadow, element) {
             if (!element.style) {
                 throw new Error("Element does have no style attribute!");
             }
@@ -420,15 +437,15 @@ Echo.Sync.BoxShadow = Core.extend({
             }
         }
     },
-    
+
     _hShadowPos: null,
     _vShadowPos: null,
     _blur: null,
     _spread: null,
     _color: null,
     _style: null,
-    
-    $construct: function(hShadowPos, vShadowPos, blur, spread, color, style) {
+
+    $construct: function (hShadowPos, vShadowPos, blur, spread, color, style) {
         if (style !== Echo.Sync.BoxShadow.STYLE_DEFAULT && style !== Echo.Sync.BoxShadow.STYLE_INSET) {
             throw new Error("Echo.Sync.BoxShadow: unknow style -> " + style);
         }
@@ -439,17 +456,17 @@ Echo.Sync.BoxShadow = Core.extend({
         this._color = color;
         this._style = style;
     },
-    
+
     /**
      * Returns a CSS representation of an box shadow value.
      * 
      * @return the rendered CSS value
      * @type String
      */
-    toCssValue: function() {
+    toCssValue: function () {
         var style = this._style === Echo.Sync.BoxShadow.STYLE_INSET ? "inset" : "";
-        var cssString = this._hShadowPos + " " + this._vShadowPos + " " + this._blur + " " + 
-                      this._spread + " " + this._color  + " " + style;
+        var cssString = this._hShadowPos + " " + this._vShadowPos + " " + this._blur + " " +
+                this._spread + " " + this._color + " " + style;
         return cssString;
     }
 });
@@ -471,14 +488,14 @@ Echo.Sync.Color = {
      * @param b the amount to adjust the blue value of the color (-255 to 255)
      * @return the adjusted color (a 24 bit hex value)
      */
-    adjust: function(value, r, g, b) {
+    adjust: function (value, r, g, b) {
         var colorInt = parseInt(value.substring(1), 16);
         var red = Math.floor(colorInt / 0x10000) + r;
         var green = Math.floor(colorInt / 0x100) % 0x100 + g;
         var blue = colorInt % 0x100 + b;
         return this.toHex(red, green, blue);
     },
-    
+
     /**
      * Blends two colors together.
      * 
@@ -489,12 +506,12 @@ Echo.Sync.Color = {
      * @return the blended color
      * @type #Color
      */
-    blend: function(value1, value2, ratio) {
+    blend: function (value1, value2, ratio) {
         ratio = ratio < 0 ? 0 : (ratio > 1 ? 1 : ratio);
         var colorInt1 = parseInt(value1.substring(1), 16);
         var colorInt2 = parseInt(value2.substring(1), 16);
         var red = Math.round(Math.floor(colorInt1 / 0x10000) * (1 - ratio) + Math.floor(colorInt2 / 0x10000) * ratio);
-        var green = Math.round(Math.floor(colorInt1 / 0x100) % 0x100 * (1 - ratio) + 
+        var green = Math.round(Math.floor(colorInt1 / 0x100) % 0x100 * (1 - ratio) +
                 Math.floor(colorInt2 / 0x100) % 0x100 * ratio);
         var blue = Math.round((colorInt1 % 0x100) * (1 - ratio) + (colorInt2 % 0x100) * ratio);
         return this.toHex(red, green, blue);
@@ -507,13 +524,13 @@ Echo.Sync.Color = {
      * @param {#Element} element the target element
      * @param {String} styleAttribute the name of the style attribute, e.g., "color", "backgroundColor" 
      */
-    render: function(color, element, styleAttribute) {
+    render: function (color, element, styleAttribute) {
         if (color) {
             color = this.toTransparent(color);
             element.style[styleAttribute] = color;
         }
     },
-    
+
     /**
      * Renders a color to an element, clearing any existing value.
      * 
@@ -521,10 +538,10 @@ Echo.Sync.Color = {
      * @param {#Element} element the target element
      * @param {String} styleAttribute the name of the style attribute, e.g., "color", "backgroundColor" 
      */
-    renderClear: function(color, element, styleAttribute) {
+    renderClear: function (color, element, styleAttribute) {
         element.style[styleAttribute] = color ? this.toTransparent(color) : "";
     },
-    
+
     /**
      * Renders the "foreground" and "background" color properties of a component to an element's "color" and
      * "backgroundColor" properties.
@@ -532,7 +549,7 @@ Echo.Sync.Color = {
      * @param {Echo.Component} component the component
      * @param {Element} the target element 
      */
-    renderFB: function(component, element) { 
+    renderFB: function (component, element) {
         var color;
         if ((color = component.render("foreground"))) {
             color = this.toTransparent(color);
@@ -543,7 +560,7 @@ Echo.Sync.Color = {
             element.style.backgroundColor = color;
         }
     },
-    
+
     /**
      * Converts red/green/blue integer values to a 6 digit hexadecimal string, preceded by a sharp, e.g. #1a2b3c.
      * 
@@ -553,7 +570,7 @@ Echo.Sync.Color = {
      * @return the hex string
      * @type String
      */
-    toHex: function(red, green, blue) {
+    toHex: function (red, green, blue) {
         if (red < 0) {
             red = 0;
         } else if (red > 255) {
@@ -572,7 +589,7 @@ Echo.Sync.Color = {
 
         return "#" + (red < 16 ? "0" : "") + red.toString(16) +
                 (green < 16 ? "0" : "") + green.toString(16) +
-                (blue < 16 ? "0" : "") + blue.toString(16); 
+                (blue < 16 ? "0" : "") + blue.toString(16);
     },
 
     /**
@@ -582,7 +599,7 @@ Echo.Sync.Color = {
      * @return the converted color
      * @type String
      */
-    toTransparent: function(color) {
+    toTransparent: function (color) {
         // the mask for 'transparent' is '#-1'
         return (color == -1 || color == '#-1' || (color && color.toLowerCase() == '#transparent')) ? 'transparent' : color;
     }
@@ -592,7 +609,7 @@ Echo.Sync.Color = {
  * Provides tools for rendering extent (dimension) properties.
  * @class
  */
-Echo.Sync.Extent = { 
+Echo.Sync.Extent = {
 
     /**
      * Regular expression to parse an extent value, e.g., "12px" into its value and unit components.
@@ -605,13 +622,13 @@ Echo.Sync.Extent = {
      * @type RegExp
      */
     _FORMATTED_INT_PIXEL_TEST: /^(-?\d+px *)$/,
-    
+
     /**
      * Regular expression to determine if an extent value is already formatted to pixel units.
      * @type RegExp
      */
     _FORMATTED_DECIMAL_PIXEL_TEST: /^(-?\d+(.\d+)?px *)$/,
-    
+
     /**
      * Determines if an extent has percent units.
      * 
@@ -619,8 +636,8 @@ Echo.Sync.Extent = {
      * @return true if the extent has percent units
      * @type Boolean
      */
-    isPercent: function(extent) {
-        if (extent == null || typeof(extent) == "number") {
+    isPercent: function (extent) {
+        if (extent == null || typeof (extent) == "number") {
             return false;
         } else {
             var parts = this._PARSER.exec(extent);
@@ -630,7 +647,7 @@ Echo.Sync.Extent = {
             return parts[2] == "%";
         }
     },
-    
+
     /**
      * Renders an extent value to an element.
      *
@@ -640,7 +657,7 @@ Echo.Sync.Extent = {
      * @param {Boolean} horizontal flag indicating whether the value is being rendered horizontally
      * @param {Boolean} allowPercent flag indicating whether percent values should be rendered
      */
-    render: function(extent, element, styleAttribute, horizontal, allowPercent) {
+    render: function (extent, element, styleAttribute, horizontal, allowPercent) {
         var cssValue = Echo.Sync.Extent.toCssValue(extent, horizontal, allowPercent);
         if (cssValue !== "") {
             element.style[styleAttribute] = cssValue;
@@ -656,24 +673,24 @@ Echo.Sync.Extent = {
      * @return the rendered CSS value or the empty string ("") if no value could be determined (null will never be returned)
      * @type String
      */
-    toCssValue: function(extent, horizontal, allowPercent) {
-        switch(typeof(extent)) {
-        case "number":
-            return Math.round(extent) + "px";
-        case "string":
-            if (this._FORMATTED_INT_PIXEL_TEST.test(extent)) {
-                return extent;
-            } else if (this._FORMATTED_DECIMAL_PIXEL_TEST.test(extent)) {
-                return Math.round(parseFloat(extent)) + "px";
-            } else {
-                if (this.isPercent(extent)) {
-                    return allowPercent ? extent : "";
+    toCssValue: function (extent, horizontal, allowPercent) {
+        switch (typeof (extent)) {
+            case "number":
+                return Math.round(extent) + "px";
+            case "string":
+                if (this._FORMATTED_INT_PIXEL_TEST.test(extent)) {
+                    return extent;
+                } else if (this._FORMATTED_DECIMAL_PIXEL_TEST.test(extent)) {
+                    return Math.round(parseFloat(extent)) + "px";
                 } else {
-                    var pixels = this.toPixels(extent, horizontal);
-                    return pixels == null ? "" : this.toPixels(extent, horizontal) + "px";
+                    if (this.isPercent(extent)) {
+                        return allowPercent ? extent : "";
+                    } else {
+                        var pixels = this.toPixels(extent, horizontal);
+                        return pixels == null ? "" : this.toPixels(extent, horizontal) + "px";
+                    }
                 }
-            }
-            break;
+                break;
         }
         return "";
     },
@@ -686,10 +703,10 @@ Echo.Sync.Extent = {
      * @return the pixel value
      * @type Number
      */
-    toPixels: function(extent, horizontal) {
+    toPixels: function (extent, horizontal) {
         if (extent == null) {
             return 0;
-        } else if (typeof(extent) == "number") {
+        } else if (typeof (extent) == "number") {
             return Math.round(extent);
         } else {
             return Math.round(Core.Web.Measure.extentToPixels(extent, horizontal));
@@ -701,7 +718,7 @@ Echo.Sync.Extent = {
  * Provides tools for rendering fill image (background image) properties.
  * @class
  */
-Echo.Sync.FillImage = { 
+Echo.Sync.FillImage = {
 
     /** Mapping between repeat property values and rendered CSS repeat values. */
     _REPEAT_VALUES: {
@@ -720,7 +737,7 @@ Echo.Sync.FillImage = {
      * @type Number
      */
     FLAG_ENABLE_IE_PNG_ALPHA_FILTER: 0x1,
-    
+
     /**
      * Determines the background-position CSS attribute of a FillImage.
      * 
@@ -728,7 +745,7 @@ Echo.Sync.FillImage = {
      * @return the appropriate CSS background-position attribute, or null if it is not specified
      * @type String
      */
-    getPosition: function(fillImage) {
+    getPosition: function (fillImage) {
         if (fillImage.x || fillImage.y) {
             var x, y;
             if (Echo.Sync.Extent.isPercent(fillImage.x)) {
@@ -746,7 +763,7 @@ Echo.Sync.FillImage = {
             return null;
         }
     },
-    
+
     /**
      * Determines the background-repeat CSS attribute of a FillImage.
      * 
@@ -754,14 +771,14 @@ Echo.Sync.FillImage = {
      * @return the appropriate CSS background-repeat attribute, or null if it is not specified/invalid
      * @type String
      */
-    getRepeat: function(fillImage) {
+    getRepeat: function (fillImage) {
         if (this._REPEAT_VALUES[fillImage.repeat]) {
-            return this._REPEAT_VALUES[fillImage.repeat]; 
+            return this._REPEAT_VALUES[fillImage.repeat];
         } else {
             return null;
         }
     },
-    
+
     /**
      * Returns the URL of a FillImage.
      * 
@@ -769,13 +786,13 @@ Echo.Sync.FillImage = {
      * @return the URL
      * @type String
      */
-    getUrl: function(fillImage) {
+    getUrl: function (fillImage) {
         if (fillImage == null) {
             return null;
         }
-        return typeof(fillImage) == "object" ? fillImage.url : fillImage;
+        return typeof (fillImage) == "object" ? fillImage.url : fillImage;
     },
-    
+
     /**
      * Renders a FillImage to an element.
      * 
@@ -786,20 +803,20 @@ Echo.Sync.FillImage = {
      *         <li><code>FLAG_ENABLE_IE_PNG_ALPHA_FILTER</code></li>
      *        <ul>
      */
-    render: function(fillImage, element, flags) {
+    render: function (fillImage, element, flags) {
         if (fillImage == null) {
             // No image specified, do nothing.
             return;
         }
-        
-        var isObject = typeof(fillImage) == "object";
+
+        var isObject = typeof (fillImage) == "object";
         var url = isObject ? fillImage.url : fillImage;
 
         if (Core.Web.Env.QUIRK_IE_SECURE_ITEMS && document.location.protocol == "https:") {
             if (url.substring(0, 5) != "http:" && url.substring(0, 6) != "https:") {
                 // Use full URL, see http://support.microsoft.com/kb/925014 and
                 // http://weblogs.asp.net/rchartier/archive/2008/03/12/ie7-this-page-contains-both-secure-and-nonsecure-items.aspx
-                url = document.location.protocol + "//" + document.location.hostname + 
+                url = document.location.protocol + "//" + document.location.hostname +
                         (document.location.port ? (":" + document.location.port) : "") + url;
             }
         }
@@ -811,14 +828,14 @@ Echo.Sync.FillImage = {
             // IE6 PNG workaround not required.
             element.style.backgroundImage = "url(" + url + ")";
         }
-        
+
         if (isObject) {
             var position = Echo.Sync.FillImage.getPosition(fillImage);
             element.style.backgroundPosition = position ? position : "";
-            element.style.backgroundRepeat = this._REPEAT_VALUES[fillImage.repeat] ? this._REPEAT_VALUES[fillImage.repeat]: ""; 
+            element.style.backgroundRepeat = this._REPEAT_VALUES[fillImage.repeat] ? this._REPEAT_VALUES[fillImage.repeat] : "";
         }
     },
-    
+
     /**
      * Renders a FillImage to an element, clearing any existing value.
      * 
@@ -829,7 +846,7 @@ Echo.Sync.FillImage = {
      *         <li><code>FLAG_ENABLE_IE_PNG_ALPHA_FILTER</code></li>
      *        <ul>
      */
-    renderClear: function(fillImage, element, flags) {
+    renderClear: function (fillImage, element, flags) {
         if (fillImage) {
             this.render(fillImage, element, flags);
         } else {
@@ -855,13 +872,13 @@ Echo.Sync.FillImage = {
  * @class
  */
 Echo.Sync.FillImageBorder = {
-    
+
     /**
      * Mapping between child node indices of container element and fill image property names of a FillImageBorder.
      * @type Array
      */
     _NAMES: ["top", "topRight", "right", "bottomRight", "bottom", "bottomLeft", "left", "topLeft"],
-    
+
     /**
      * Two dimensional mapping array representing which FillImageBorder side configurations have which elements.
      * First index represents FillImageBorder configuration, from 0-15, with bitwise 1=top, 2=right, 4=bottom 8=left
@@ -870,8 +887,8 @@ Echo.Sync.FillImageBorder = {
      * @type Array
      */
     _MAP: [
-    //   0  1  2  3  4  5  6  7
-    //   T TR  R BR  B BL  L  TL
+        //   0  1  2  3  4  5  6  7
+        //   T TR  R BR  B BL  L  TL
         [0, 0, 0, 0, 0, 0, 0, 0], // ----
         [1, 0, 0, 0, 0, 0, 0, 0], // ---t
         [0, 0, 1, 0, 0, 0, 0, 0], // --r-
@@ -902,19 +919,19 @@ Echo.Sync.FillImageBorder = {
      * </li>
      */
     _PROTOTYPES: [],
-    
+
     /**
      * Generates a segment of a rendered FillImageBorder DOM and adds it to its parent.
      * 
      * @param {Element} parent the parent element
      * @param {String} css the CSS text add to the rendered element
      */
-    _createSegment: function(parent, css) {
+    _createSegment: function (parent, css) {
         var child = document.createElement("div");
         child.style.cssText = "font-size:1px;line-height:0;position:absolute;" + css;
         parent.appendChild(child);
     },
-    
+
     /**
      * Creates a prototype rendered DOM element hierarchy to display a fill image border.
      * The values returned by this method are stored and cloned for performance.
@@ -929,12 +946,12 @@ Echo.Sync.FillImageBorder = {
      *        </li>
      * @return the created border prototype
      */
-    _createPrototype: function(key) {
+    _createPrototype: function (key) {
         var div = document.createElement("div");
         if (Core.Web.Env.QUIRK_IE_HAS_LAYOUT) {
             div.style.zoom = 1;
         }
-        
+
         if (key & 0x1) { // Top
             this._createSegment(div, "top:0;");
             if (key & 0x2) { // Right
@@ -961,7 +978,7 @@ Echo.Sync.FillImageBorder = {
         }
         return div;
     },
-    
+
     /***
      * Returns the array of border DIV elements, in  the following order:
      * top, top-right, right, bottom-right, bottom, bottom-left, left, top-left.
@@ -972,7 +989,7 @@ Echo.Sync.FillImageBorder = {
      * @return the array of border DIV elements
      * @type Array
      */
-    getBorder: function(containerDiv) {
+    getBorder: function (containerDiv) {
         var border = [];
         var child = containerDiv.firstChild;
         while (child) {
@@ -983,7 +1000,7 @@ Echo.Sync.FillImageBorder = {
         }
         return border;
     },
-    
+
     /**
      * Returns the content element (to which children may be added) of a FillImageBorder container element created with
      * <code>renderContainer()</code>.
@@ -992,7 +1009,7 @@ Echo.Sync.FillImageBorder = {
      * @return the content element to which child nodes may be added
      * @type Element
      */
-    getContainerContent: function(containerDiv) {
+    getContainerContent: function (containerDiv) {
         if (!containerDiv.__FIB_hasContent) {
             return null;
         }
@@ -1005,7 +1022,7 @@ Echo.Sync.FillImageBorder = {
         }
         return null;
     },
-    
+
     /**
      * Creates a DOM hierarchy representing a FillImageBorder.
      * The provided childElement will be added to it, if specified.
@@ -1030,19 +1047,19 @@ Echo.Sync.FillImageBorder = {
      * @return the outer container DIV element of the rendered DOM hierarchy
      * @type Element
      */
-    renderContainer: function(fillImageBorder, configuration) {
+    renderContainer: function (fillImageBorder, configuration) {
         fillImageBorder = fillImageBorder || {};
         configuration = configuration || {};
-        
+
         // Load pixel border insets.
         var bi = Echo.Sync.Insets.toPixels(fillImageBorder.borderInsets);
-        
+
         // Create bitset "key" based on which sides of border are present.
         var key = (bi.left && 0x8) | (bi.bottom && 0x4) | (bi.right && 0x2) | (bi.top && 0x1);
         var map = this._MAP[key];
-        var prototypeDiv = this._PROTOTYPES[key] ? this._PROTOTYPES[key] : this._PROTOTYPES[key] = this._createPrototype(key); 
+        var prototypeDiv = this._PROTOTYPES[key] ? this._PROTOTYPES[key] : this._PROTOTYPES[key] = this._createPrototype(key);
         var div, child, childClone, firstChild, i, content = null, border = [], insertBefore = null, testChild, insets;
-        
+
         if (configuration.update) {
             // Updating existing FillImageBorder container DIV: load element specified in update property.
             div = configuration.update;
@@ -1062,7 +1079,7 @@ Echo.Sync.FillImageBorder = {
                     content = testChild;
                 }
             }
-            
+
             // Add children from prototype.
             child = prototypeDiv.firstChild;
             while (child) {
@@ -1071,7 +1088,7 @@ Echo.Sync.FillImageBorder = {
                     // Store reference to first added child.
                     firstChild = childClone;
                 }
-                
+
                 // Insert child.
                 if (insertBefore) {
                     div.insertBefore(childClone, insertBefore);
@@ -1095,7 +1112,7 @@ Echo.Sync.FillImageBorder = {
                 div.__FIB_hasContent = true;
                 div.appendChild(content);
             }
-            
+
             // Set positioning based on configuration.
             if (configuration.absolute) {
                 div.__FIB_absolute = true;
@@ -1111,7 +1128,7 @@ Echo.Sync.FillImageBorder = {
             }
         }
         div.__key = key;
-        
+
         // Render FillImageBorder.
         child = firstChild;
         var radiusInsets = null;
@@ -1125,12 +1142,12 @@ Echo.Sync.FillImageBorder = {
             }
             // Set identifier on segment element.
             child.__FIB_segment = i;
-            
+
             // Store segment element in array for convenient access later.
             border[i] = child;
-            
+
             if (fillImageBorder.color) {
-                child.style.backgroundColor = fillImageBorder.color; 
+                child.style.backgroundColor = fillImageBorder.color;
             }
             if (i === 0 || i === 1 || i === 7) { // 0,1,7 = top
                 child.style.height = bi.top + "px";
@@ -1142,7 +1159,7 @@ Echo.Sync.FillImageBorder = {
             } else if (i >= 5) { // 5,6,7 = left
                 child.style.width = bi.left + "px";
             }
-            
+
             if (radiusInsets) {
                 if (i === 7 && radiusInsets.left > 0) {
                     child.style.borderTopLeftRadius = radiusInsets.left + "px";
@@ -1157,7 +1174,7 @@ Echo.Sync.FillImageBorder = {
                     child.style.borderBottomLeftRadius = radiusInsets.bottom + "px";
                 }
             }
-            
+
             Echo.Sync.FillImage.render(fillImageBorder[this._NAMES[i]], child, Echo.Sync.FillImage.FLAG_ENABLE_IE_PNG_ALPHA_FILTER);
             child = child.nextSibling;
         }
@@ -1179,12 +1196,12 @@ Echo.Sync.FillImageBorder = {
             border[6].style.top = bi.top + "px";
             border[6].style.bottom = bi.bottom + "px";
         }
-        
+
         if (div.__FIB_absolute) {
             if (content) {
                 // Set content positioning.
                 var ci = Echo.Sync.Insets.toPixels(fillImageBorder.contentInsets);
-                content.style.position = "absolute"; 
+                content.style.position = "absolute";
                 content.style.overflow = "auto";
                 content.style.top = ci.top + "px";
                 content.style.right = ci.right + "px";
@@ -1203,10 +1220,10 @@ Echo.Sync.FillImageBorder = {
                 }
             }
         }
-        
+
         return div;
     },
-    
+
     /**
      * Performs renderDisplay() operations on a FillImageBorder container DOM hierarchy.
      * This method should be invoked the renderDisplay() method of a synchronization peer on each FillImageBorder container
@@ -1214,7 +1231,7 @@ Echo.Sync.FillImageBorder = {
      * 
      * @param {Element} containerDiv the container element generated by <code>renderContainer()</code>
      */
-    renderContainerDisplay: function(containerDiv) {
+    renderContainerDisplay: function (containerDiv) {
         var content;
         if (Core.Web.VirtualPosition.enabled) {
             if (containerDiv.__FIB_absolute) {
@@ -1237,7 +1254,7 @@ Echo.Sync.FillImageBorder = {
  * Provides tools for rendering font properties.
  * @class
  */
-Echo.Sync.Font = { 
+Echo.Sync.Font = {
 
     /**
      * Renders a Font property to an element.
@@ -1245,7 +1262,7 @@ Echo.Sync.Font = {
      * @param {#Font} font the font
      * @param {Element} element the target element
      */
-    render: function(font, element) {
+    render: function (font, element) {
         if (!font) {
             return;
         }
@@ -1254,6 +1271,43 @@ Echo.Sync.Font = {
                 element.style.fontFamily = font.typeface.join(",");
             } else {
                 element.style.fontFamily = font.typeface;
+            }
+        }
+        if (font.preconnectLink) {
+            if (document.loadedFont === undefined) {
+                document.loadedFont = [];
+            }
+            var head = document.head;
+            for (var i = 0; i < font.preconnectLink.length; ++i) {
+                var x = font.preconnectLink[i];
+                if (document.loadedFont.includes(x)) {
+                    console.log("Remote Font Not adding ", x);
+                } else {
+                    console.log("Remote Font adding ", x);
+                    document.loadedFont.push(x);
+                    var link = document.createElement("link");
+                    link.rel = "preconnect";
+                    link.href = x;
+                    head.appendChild(link);
+                }
+            }
+        }
+        if (font.cssLink) {
+            if (document.loadedFont === undefined) {
+                document.loadedFont = [];
+            }var head = document.head;
+            for (var i = 0; i < font.cssLink.length; ++i) {
+                var x = font.cssLink[i];
+                if (document.loadedFont.includes(x)) {
+                    console.log("Remote Font Not adding ", x);
+                } else {
+                    console.log("Remote Font adding ", x);
+                    document.loadedFont.push(x);
+                    var link = document.createElement("link");
+                    link.rel = "stylesheet";
+                    link.href = x;
+                    head.appendChild(link);
+                }
             }
         }
         if (font.size) {
@@ -1274,14 +1328,14 @@ Echo.Sync.Font = {
             element.style.textDecoration = "line-through";
         }
     },
-    
+
     /**
      * Renders a Font property to an element, clearing any previously set font first.
      * 
      * @param {#Font} font the font
      * @param {Element} element the target element
      */
-    renderClear: function(font, element) {
+    renderClear: function (font, element) {
         if (font) {
             this.render(font, element);
             if (!font.typeface) {
@@ -1322,8 +1376,8 @@ Echo.Sync.ImageReference = {
      * @return the URL
      * @type String
      */
-    getUrl: function(imageReference) {
-        return imageReference ? (typeof(imageReference) == "string" ? imageReference : imageReference.url) : null;
+    getUrl: function (imageReference) {
+        return imageReference ? (typeof (imageReference) == "string" ? imageReference : imageReference.url) : null;
     },
 
     /**
@@ -1332,12 +1386,12 @@ Echo.Sync.ImageReference = {
      * @param {#ImageReference} imageReference the image reference
      * @param {Element} imgElement the IMG element.
      */
-    renderImg: function(imageReference, imgElement) {
+    renderImg: function (imageReference, imgElement) {
         if (!imageReference) {
             return;
         }
-        
-        if (typeof(imageReference) == "string") {
+
+        if (typeof (imageReference) == "string") {
             imgElement.src = imageReference;
         } else {
             imgElement.src = imageReference.url;
@@ -1365,17 +1419,17 @@ Echo.Sync.Insets = {
     _FORMATTED_PIXEL_INSETS: /^(-?\d+px *){1,4}$/,
 
     /** toPixels() return value when insets are 0/null. */
-    _ZERO: { top: 0, right: 0, bottom: 0, left: 0 },
-    
+    _ZERO: {top: 0, right: 0, bottom: 0, left: 0},
+
     /**
      * Mapping between number of inset values provided and arrays which represent the
      * inset value index for the top, right, bottom, and left value. 
      */
     _INDEX_MAPS: {
-        1: [0, 0, 0, 0], 
-        2: [0, 1, 0, 1], 
-        3: [0, 1, 2, 1], 
-        4: [0, 1, 2, 3] 
+        1: [0, 0, 0, 0],
+        2: [0, 1, 0, 1],
+        3: [0, 1, 2, 1],
+        4: [0, 1, 2, 3]
     },
 
     /**
@@ -1385,37 +1439,37 @@ Echo.Sync.Insets = {
      * @param {Element} element the target element
      * @param {String} styleAttribute the style attribute name, e.g., "padding" or "margin" 
      */
-    render: function(insets, element, styleAttribute) {
-        switch(typeof(insets)) {
-        case "number":
-            element.style[styleAttribute] = Math.round(insets) + "px";
-            break;
-        case "string":
-            if (this._FORMATTED_PIXEL_INSETS.test(insets)) {
-                element.style[styleAttribute] = insets;
-            } else {
-                var pixelInsets = this.toPixels(insets);
-                element.style[styleAttribute] = pixelInsets.top + "px " + pixelInsets.right + "px " +
-                        pixelInsets.bottom + "px " + pixelInsets.left + "px";
-            }
-            break;
+    render: function (insets, element, styleAttribute) {
+        switch (typeof (insets)) {
+            case "number":
+                element.style[styleAttribute] = Math.round(insets) + "px";
+                break;
+            case "string":
+                if (this._FORMATTED_PIXEL_INSETS.test(insets)) {
+                    element.style[styleAttribute] = insets;
+                } else {
+                    var pixelInsets = this.toPixels(insets);
+                    element.style[styleAttribute] = pixelInsets.top + "px " + pixelInsets.right + "px " +
+                            pixelInsets.bottom + "px " + pixelInsets.left + "px";
+                }
+                break;
         }
     },
-    
+
     /**
      * Renders an insets property to an element as absolute position coordinates (i.e., top/right/bottom/left values).
      * 
      * @param {#Instes} insets the insets property
      * @param {Element} element the target element
      */
-    renderPosition: function(insets, element) {
+    renderPosition: function (insets, element) {
         var insetsPx = this.toPixels(insets);
         element.style.top = insetsPx.top + "px";
         element.style.right = insetsPx.right + "px";
         element.style.bottom = insetsPx.bottom + "px";
         element.style.left = insetsPx.left + "px";
     },
-    
+
     /**
      * Generates a CSS value for an insets property.
      * 
@@ -1423,37 +1477,37 @@ Echo.Sync.Insets = {
      * @return the CSS value
      * @type String
      */
-    toCssValue: function(insets) {
-        switch(typeof(insets)) {
-        case "number":
-            return insets + "px";
-        case "string":
-            if (this._FORMATTED_PIXEL_INSETS.test(insets)) {
-                return insets;
-            } else {
-                var pixelInsets = this.toPixels(insets);
-                return pixelInsets.top + "px " + pixelInsets.right + "px " +
-                        pixelInsets.bottom + "px " + pixelInsets.left + "px";
-            }
-            break;
+    toCssValue: function (insets) {
+        switch (typeof (insets)) {
+            case "number":
+                return insets + "px";
+            case "string":
+                if (this._FORMATTED_PIXEL_INSETS.test(insets)) {
+                    return insets;
+                } else {
+                    var pixelInsets = this.toPixels(insets);
+                    return pixelInsets.top + "px " + pixelInsets.right + "px " +
+                            pixelInsets.bottom + "px " + pixelInsets.left + "px";
+                }
+                break;
         }
         return "";
     },
-    
+
     /**
      * Returns an object representing the pixel dimensions of a insets property.
      * 
      * @param {#Insets} insets the insets property
      * @return an object containing top, bottom, left, and right values representing the pixel sizes of the insets property
      */
-    toPixels: function(insets) {
+    toPixels: function (insets) {
         if (insets == null) {
             return this._ZERO;
-        } else if (typeof(insets) == "number") {
+        } else if (typeof (insets) == "number") {
             insets = Math.round(insets);
-            return { top: insets, right: insets, bottom: insets, left: insets };
+            return {top: insets, right: insets, bottom: insets, left: insets};
         }
-        
+
         insets = insets.split(" ");
         var map = this._INDEX_MAPS[insets.length];
         return {
@@ -1476,7 +1530,7 @@ Echo.Sync.LayoutDirection = {
      * @param {Echo.LayoutDirection} layoutDirection the layoutDirection property (may be null)
      * @param {Element} element the target element
      */
-    render: function(layoutDirection, element) {
+    render: function (layoutDirection, element) {
         if (layoutDirection) {
             element.dir = layoutDirection.isLeftToRight() ? "ltr" : "rtl";
         }
@@ -1490,43 +1544,43 @@ Echo.Sync.LayoutDirection = {
 Echo.Sync.TriCellTable = Core.extend({
 
     $static: {
-        
+
         /** 
          * Orientation flag indicating inverted (trailing-leading or bottom-top) orientation.
          * @type Number 
          */
         INVERTED: 1,
-        
+
         /** 
          * Orientation flag indicating vertical (top-bottom or bottom-top) orientation. 
          * @type Number 
          */
         VERTICAL: 2,
-        
+
         /** 
          * Orientation value indicating horizontal orientation, leading first, trailing second. 
          * @type Number 
          */
         LEADING_TRAILING: 0,
-        
+
         /** 
          * Orientation value indicating horizontal orientation, trailing first, leading second.
          * @type Number 
          */
         TRAILING_LEADING: 1, // INVERTED
-        
+
         /** 
          * Orientation value indicating vertical orientation, top first, bottom second. 
          * @type Number 
          */
-        TOP_BOTTOM: 2,       // VERTICAL
-        
+        TOP_BOTTOM: 2, // VERTICAL
+
         /** 
          * Orientation value indicating vertical orientation, bottom first, top second.
          * @type Number 
          */
-        BOTTOM_TOP: 3,       // VERTICAL | INVERTED
-        
+        BOTTOM_TOP: 3, // VERTICAL | INVERTED
+
         /**
          * Creates a prototype DOM element hierarchy for a TriCellTable, which may
          * be cloned for purposes of performance enhancement.
@@ -1534,17 +1588,17 @@ Echo.Sync.TriCellTable = Core.extend({
          * @return the prototype DOM element hierarchy
          * @type Element
          */
-        _createTablePrototype: function() {
+        _createTablePrototype: function () {
             var table = document.createElement("table");
             table.style.borderCollapse = "collapse";
             table.style.padding = "0";
-            
+
             var tbody = document.createElement("tbody");
             table.appendChild(tbody);
-            
+
             return table;
         },
-        
+
         /**
          * Returns the inverted orientation value which should be used for a component (the opposite of that which
          * would be returned by getOrientation().
@@ -1556,7 +1610,7 @@ Echo.Sync.TriCellTable = Core.extend({
          * @return the (inverted) orientation
          * @type Number
          */
-        getInvertedOrientation: function(component, propertyName, defaultValue) {
+        getInvertedOrientation: function (component, propertyName, defaultValue) {
             return this.getOrientation(component, propertyName, defaultValue) ^ this.INVERTED;
         },
 
@@ -1570,33 +1624,37 @@ Echo.Sync.TriCellTable = Core.extend({
          * @return the orientation
          * @type Number
          */
-        getOrientation: function(component, propertyName, defaultValue) {
+        getOrientation: function (component, propertyName, defaultValue) {
             var position = component.render(propertyName, defaultValue);
             var orientation;
             if (position) {
                 switch (Echo.Sync.Alignment.getRenderedHorizontal(position, component)) {
-                case "left":   return this.LEADING_TRAILING;
-                case "right":  return this.TRAILING_LEADING;
+                    case "left":
+                        return this.LEADING_TRAILING;
+                    case "right":
+                        return this.TRAILING_LEADING;
                 }
                 switch (Echo.Sync.Alignment.getVertical(position, component)) {
-                case "top":    return this.TOP_BOTTOM;
-                case "bottom": return this.BOTTOM_TOP;
+                    case "top":
+                        return this.TOP_BOTTOM;
+                    case "bottom":
+                        return this.BOTTOM_TOP;
                 }
             }
-            return component.getRenderLayoutDirection().isLeftToRight() ? this.TRAILING_LEADING : this.LEADING_TRAILING; 
+            return component.getRenderLayoutDirection().isLeftToRight() ? this.TRAILING_LEADING : this.LEADING_TRAILING;
         }
     },
-    
-    $load: function() {
-        this._tablePrototype = this._createTablePrototype(); 
+
+    $load: function () {
+        this._tablePrototype = this._createTablePrototype();
     },
-    
+
     /**
      * The rendered TABLE element.
      * @type Element
      */
     tableElement: null,
-    
+
     /**
      * The rendered TBODY element.
      * @type Element
@@ -1628,36 +1686,36 @@ Echo.Sync.TriCellTable = Core.extend({
      *        the margin size between the combination
      *        of elements 0 and 1 and element 2
      */
-    $construct: function(orientation0_1, margin0_1, orientation01_2, margin01_2) {
+    $construct: function (orientation0_1, margin0_1, orientation01_2, margin01_2) {
         this.tableElement = Echo.Sync.TriCellTable._tablePrototype.cloneNode(true);
         this.tbodyElement = this.tableElement.firstChild;
-        
+
         if (orientation01_2 == null) {
             this._configure2(orientation0_1, margin0_1);
         } else {
             this._configure3(orientation0_1, margin0_1, orientation01_2, margin01_2);
         }
     },
-    
+
     /**
      * Appends a TD element to a TR element, if TD element is not null.
      * 
      * @param {Element} tr the table row (TR) element
      * @param {Element} td the table cell (TD) element
      */
-    _addColumn: function(tr, td) {
+    _addColumn: function (tr, td) {
         if (td != null) {
             tr.appendChild(td);
         }
     },
-    
+
     /**
      * If the TD element is not null, creates a TR row element and appends the TD element to it;
      * then appends the TR element to the table body.
      * 
      * @param {Element} td the table cell element
      */
-    _addRow: function(td) {
+    _addRow: function (td) {
         if (td == null) {
             return;
         }
@@ -1665,7 +1723,7 @@ Echo.Sync.TriCellTable = Core.extend({
         tr.appendChild(td);
         this.tbodyElement.appendChild(tr);
     },
-    
+
     /**
      * Adds a spacer DIV to the specified parent element.
      * 
@@ -1674,7 +1732,7 @@ Echo.Sync.TriCellTable = Core.extend({
      * @param {Boolean} vertical boolean flag indicating the orientation of the spacer, 
      *        true for vertical spacers, false for horizontal
      */
-    _addSpacer: function(parentElement, size, vertical) {
+    _addSpacer: function (parentElement, size, vertical) {
         var divElement = document.createElement("div");
         if (vertical) {
             divElement.style.cssText = "width:1px;height:" + size + "px;font-size:1px;line-height:0;";
@@ -1683,19 +1741,19 @@ Echo.Sync.TriCellTable = Core.extend({
         }
         parentElement.appendChild(divElement);
     },
-    
+
     /**
      * Configures a two-celled TriCellTable.
      * 
      * @param {Number} orientation0_1 the orientation of element 0 with respect to element 1
      * @param {Number} margin0_1 the margin size between element 0 and element 1
      */
-    _configure2: function(orientation0_1, margin0_1) {
+    _configure2: function (orientation0_1, margin0_1) {
         this.tdElements = [document.createElement("td"), document.createElement("td")];
         this.tdElements[0].style.padding = "0";
         this.tdElements[1].style.padding = "0";
         this.marginTdElements = [];
-        
+
         if (margin0_1) {
             this.marginTdElements[0] = document.createElement("td");
             this.marginTdElements[0].style.padding = "0";
@@ -1707,7 +1765,7 @@ Echo.Sync.TriCellTable = Core.extend({
                 this._addSpacer(this.marginTdElements[0], margin0_1, true);
             }
         }
-        
+
         if (orientation0_1 & Echo.Sync.TriCellTable.VERTICAL) {
             // Vertically oriented.
             if (orientation0_1 & Echo.Sync.TriCellTable.INVERTED) {
@@ -1738,7 +1796,7 @@ Echo.Sync.TriCellTable = Core.extend({
             this.tbodyElement.appendChild(tr);
         }
     },
-    
+
     /**
      * Configures a two-celled TriCellTable.
      * 
@@ -1747,14 +1805,14 @@ Echo.Sync.TriCellTable = Core.extend({
      * @param {Number} orientation01_2 the orientation of Elements 0 and 1 with respect to Element 2
      * @param {Number} margin01_2 the margin size between the combination of elements 0 and 1 and element 2
      */
-    _configure3: function(orientation0_1, margin0_1, orientation01_2, margin01_2) {
+    _configure3: function (orientation0_1, margin0_1, orientation01_2, margin01_2) {
         this.tdElements = [];
         for (var i = 0; i < 3; ++i) {
             this.tdElements[i] = document.createElement("td");
             this.tdElements[i].style.padding = "0";
         }
         this.marginTdElements = [];
-        
+
         if (margin0_1 || margin01_2 != null) {
             if (margin0_1 && margin0_1 > 0) {
                 this.marginTdElements[0] = document.createElement("td");
@@ -1777,18 +1835,18 @@ Echo.Sync.TriCellTable = Core.extend({
                 }
             }
         }
-        
+
         if (orientation0_1 & Echo.Sync.TriCellTable.VERTICAL) {
             // Vertically oriented 0/1.
             if (orientation01_2 & Echo.Sync.TriCellTable.VERTICAL) {
                 // Vertically oriented 01/2
-                
+
                 if (orientation01_2 & Echo.Sync.TriCellTable.INVERTED) {
                     // 2 before 01: render #2 and margin at beginning of TABLE.
                     this._addRow(this.tdElements[2]);
                     this._addRow(this.marginTdElements[1]);
                 }
-                
+
                 // Render 01
                 if (orientation0_1 & Echo.Sync.TriCellTable.INVERTED) {
                     // Inverted (bottom to top)
@@ -1801,7 +1859,7 @@ Echo.Sync.TriCellTable = Core.extend({
                     this._addRow(this.marginTdElements[0]);
                     this._addRow(this.tdElements[1]);
                 }
-    
+
                 if (!(orientation01_2 & Echo.Sync.TriCellTable.INVERTED)) {
                     // 01 before 2: render #2 and margin at end of TABLE.
                     this._addRow(this.marginTdElements[1]);
@@ -1809,14 +1867,14 @@ Echo.Sync.TriCellTable = Core.extend({
                 }
             } else {
                 // Horizontally oriented 01/2
-                
+
                 // Determine and apply row span based on presence of margin between 0 and 1.
                 var rows = (margin0_1 && margin0_1 > 0) ? 3 : 2;
                 this.tdElements[2].rowSpan = rows;
                 if (this.marginTdElements[1]) {
                     this.marginTdElements[1].rowSpan = rows;
                 }
-                
+
                 var tr = document.createElement("tr");
                 if (orientation01_2 & Echo.Sync.TriCellTable.INVERTED) {
                     this._addColumn(tr, this.tdElements[2]);
@@ -1836,7 +1894,7 @@ Echo.Sync.TriCellTable = Core.extend({
                     this._addColumn(tr, this.tdElements[2]);
                 }
                 this.tbodyElement.appendChild(tr);
-                
+
                 this._addRow(this.marginTdElements[0]);
                 if (orientation0_1 & Echo.Sync.TriCellTable.INVERTED) {
                     this._addRow(this.tdElements[0]);
@@ -1848,20 +1906,20 @@ Echo.Sync.TriCellTable = Core.extend({
             // horizontally oriented 0/1
             if (orientation01_2 & Echo.Sync.TriCellTable.VERTICAL) {
                 // vertically oriented 01/2
-    
+
                 // determine and apply column span based on presence of margin between 0 and 1
                 var columns = margin0_1 ? 3 : 2;
                 this.tdElements[2].setAttribute("colspan", columns);
                 if (this.marginTdElements[1] != null) {
                     this.marginTdElements[1].setAttribute("colspan", columns);
                 }
-                
+
                 if (orientation01_2 & Echo.Sync.TriCellTable.INVERTED) {
                     // 2 before 01: render #2 and margin at beginning of TR.
                     this._addRow(this.tdElements[2]);
                     this._addRow(this.marginTdElements[1]);
                 }
-                
+
                 // Render 01
                 tr = document.createElement("tr");
                 if ((orientation0_1 & Echo.Sync.TriCellTable.INVERTED) === 0) {
@@ -1876,7 +1934,7 @@ Echo.Sync.TriCellTable = Core.extend({
                     this._addColumn(tr, this.tdElements[0]);
                 }
                 this.tbodyElement.appendChild(tr);
-                
+
                 if (!(orientation01_2 & Echo.Sync.TriCellTable.INVERTED)) {
                     // 01 before 2: render margin and #2 at end of TR.
                     this._addRow(this.marginTdElements[1]);
@@ -1890,7 +1948,7 @@ Echo.Sync.TriCellTable = Core.extend({
                     this._addColumn(tr, this.tdElements[2]);
                     this._addColumn(tr, this.marginTdElements[1]);
                 }
-                
+
                 // Render 01
                 if (orientation0_1 & Echo.Sync.TriCellTable.INVERTED) {
                     // inverted (right to left)
@@ -1903,13 +1961,13 @@ Echo.Sync.TriCellTable = Core.extend({
                     this._addColumn(tr, this.marginTdElements[0]);
                     this._addColumn(tr, this.tdElements[1]);
                 }
-                
+
                 if (!(orientation01_2 & Echo.Sync.TriCellTable.INVERTED)) {
                     this._addColumn(tr, this.marginTdElements[1]);
                     this._addColumn(tr, this.tdElements[2]);
                 }
-                
-                this.tbodyElement.appendChild(tr);        
+
+                this.tbodyElement.appendChild(tr);
             }
         }
     }
@@ -1919,21 +1977,21 @@ Echo.Sync.TriCellTable = Core.extend({
 /**
  * Provides tools for rendering rounded corners
  */
-Echo.Sync.RoundedCorner = { 
+Echo.Sync.RoundedCorner = {
 
     /**
      * Renders a corner radius to an element.
      * 
      * @param {#Insets} radius the radius(es) to apply to a component
-                        in the order: top-left, top-right, bottom-right, bottom-left 
+     in the order: top-left, top-right, bottom-right, bottom-left 
      * @param {Element} element the target element
      */
-    render: function(radius, element) {
+    render: function (radius, element) {
         if (!radius) {
             return;
         }
         var ci = Echo.Sync.Insets.toPixels(radius);
-        if (ci.left > 0 && ci.left == ci.top  && ci.left == ci.right && ci.left == ci.bottom) {
+        if (ci.left > 0 && ci.left == ci.top && ci.left == ci.right && ci.left == ci.bottom) {
             element.style.borderRadius = ci.left + "px";
         } else {
             if (ci.left > 0) {
