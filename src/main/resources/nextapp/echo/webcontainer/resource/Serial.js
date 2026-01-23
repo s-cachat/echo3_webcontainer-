@@ -871,3 +871,30 @@ Echo.Serial.Position = Core.extend(Echo.Serial.PropertyTranslator, {
         Echo.Serial.addPropertyTranslator("Position", this);
     }
 });
+
+/**
+ * String TextTransform Translator Singleton.
+ */
+Echo.Serial.TextTransform = Core.extend(Echo.Serial.PropertyTranslator, {
+    
+    $static: {
+
+        /** @see Echo.Serial.PropertyTranslator#toProperty */
+        toProperty: function(client, pElement) {
+            var textNode = pElement.firstChild;
+            if (!textNode) {
+                return "";
+            }
+            var text = textNode.data;
+            while (textNode.nextSibling) {
+                textNode = textNode.nextSibling;
+                text += textNode.data;
+            }
+            return text;
+        }
+    },
+
+    $load: function() {
+        Echo.Serial.addPropertyTranslator("TextTransform", this);
+    }
+});

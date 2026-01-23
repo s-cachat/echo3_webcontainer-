@@ -358,6 +358,7 @@ Echo.Sync.Button = Core.extend(Echo.Render.ComponentSync, {
         }
         
         var text = this.component.render("text");
+        var textTransform = this.component.render("textTransform");
         var icon = Echo.Sync.getEffectProperty(this.component, "icon", "disabledIcon", !this.enabled);
         var iconTextMargin = icon ? this.component.render("iconTextMargin", Echo.Sync.Button._defaultIconTextMargin) : 0;
         var orientation = Echo.Sync.TriCellTable.getOrientation(this.component, "textPosition");
@@ -373,6 +374,9 @@ Echo.Sync.Button = Core.extend(Echo.Render.ComponentSync, {
                 Echo.Sync.Extent.toPixels(iconTextMargin), vertical);
         if (text) {
             this.renderButtonText(contentContainer.addCell(), text);
+        }
+        if (textTransform) {
+            this.div.style.textTransform = textTransform;
         }
         if(icon) {
             this.iconImg = this.renderButtonIcon(contentContainer.addCell(), icon);

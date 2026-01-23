@@ -56,6 +56,7 @@ Echo.Sync.Label = Core.extend(Echo.Render.ComponentSync, {
             radius = this.component.render("radius"),
             boxShadow = this.component.render("boxShadow"),
             toolTip = this.component.render("toolTipText"),
+            textTransform = this.component.render("textTransform"),
             img;
         var formatting = true;
 
@@ -106,6 +107,9 @@ Echo.Sync.Label = Core.extend(Echo.Render.ComponentSync, {
                     }
                     Echo.Sync.renderComponentDefaults(this.component, this._node);
                 }
+            }
+            if (textTransform) {
+                this._node.style.textTransform = textTransform;
             }
         } else if (icon) {
             img = document.createElement("img");

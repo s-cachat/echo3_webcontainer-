@@ -161,6 +161,10 @@ Echo.Sync.TextComponent = Core.extend(Echo.Render.ComponentSync, {
         if (placeholder) {
             this.input.placeholder = placeholder;
         }
+        var textTransform = this.component.render("textTransform");
+        if (textTransform) {
+            this.input.textTransform = textTransform;
+        }
     },
     
     /**
