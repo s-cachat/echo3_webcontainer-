@@ -103,6 +103,11 @@ implements Service {
         metaGeneratorElement.setAttribute("name", "generator");
         metaGeneratorElement.setAttribute("content", ApplicationInstance.ID_STRING);
         headElement.appendChild(metaGeneratorElement);
+        
+        Element noindexElement = document.createElement("meta");
+        noindexElement.setAttribute("name", "robots");
+        noindexElement.setAttribute("content", "noindex");
+        headElement.appendChild(noindexElement);
 
         if (ServerConfiguration.IE_EDGE_MODE) {
             Element metaCompElement = document.createElement("meta");
