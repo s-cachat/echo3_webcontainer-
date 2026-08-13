@@ -473,7 +473,14 @@ public abstract class WebContainerServlet extends HttpServlet {
                 response.setHeader("Cache-Control", "no-store");
                 response.setHeader("Expires", "0");
             }
-
+            response.setHeader("X-Content-Type-Options", "nosniff");
+            response.setHeader("Strict-Transport-Security", "max-age=31536000");
+            response.addHeader("Permissions-Policy", "geolocation=*");
+            response.addHeader("Permissions-Policy", "camera=*");
+            response.addHeader("Content-Security-Policy", "frame-ancestors 'self'");
+            response.setHeader("Referrer-Policy", "origin");
+            response.setHeader("Content-Security-Policy", "origin");
+            response.setHeader("X-Robots-Tag","noindex");
             service.service(conn);
             final UserInstance userInstance = conn.getUserInstance();
             if (userInstance != null) {
