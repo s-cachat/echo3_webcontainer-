@@ -480,17 +480,13 @@ public abstract class WebContainerServlet extends HttpServlet {
             response.addHeader("Content-Security-Policy", "frame-ancestors 'self'");
             response.setHeader("Referrer-Policy", "origin");
             response.setHeader("Content-Security-Policy", "origin");
-            response.setHeader("X-Robots-Tag","noindex");
+            response.setHeader("X-Robots-Tag", "noindex");
             service.service(conn);
             final UserInstance userInstance = conn.getUserInstance();
             if (userInstance != null) {
                 processAsyncEvents(request, userInstance.getApplicationInstance());
             }
-        } catch (ServletException ex) {
-            processError(conn, request, response, ex);
-        } catch (IOException ex) {
-            processError(conn, request, response, ex);
-        } catch (RuntimeException ex) {
+        } catch (ServletException | IOException | RuntimeException ex) {
             processError(conn, request, response, ex);
         } finally {
             activeConnection.set(null);
@@ -517,7 +513,11 @@ public abstract class WebContainerServlet extends HttpServlet {
         }
 
         String exceptionId = Uid.generateUidString();
-        Log.log("Server Exception. ID: " + exceptionId, ex);
+        if (ex instanceof SynchronizationException) {
+            Log.log("Server Exception. ID: " + exceptionId + ": " + ex.getMessage());
+        } else {
+            Log.log("Server Exception. ID: " + exceptionId, ex);
+        }
         response.setContentType("text/plain");
         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
         response.getWriter().write("Server Exception. ID: " + exceptionId);

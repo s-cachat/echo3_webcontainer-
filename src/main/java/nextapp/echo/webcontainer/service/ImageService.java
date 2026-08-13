@@ -65,6 +65,7 @@ implements Service {
     /**
      * @see nextapp.echo.webcontainer.Service#getId()
      */
+    @Override
     public String getId() {
         return SERVICE_ID;
     }
@@ -72,6 +73,7 @@ implements Service {
     /**
      * @see nextapp.echo.webcontainer.Service#getVersion()
      */
+    @Override
     public int getVersion() {
         return 0; // Enable caching.
     }
@@ -83,6 +85,7 @@ implements Service {
      * @param userInstance the relevant application user instance
      * @param imageId the unique id to retrieve the image from the
      *        <code>ContainerInstance</code>
+     * @return the URI
      */
     public String createUri(UserInstance userInstance, String imageId) {
         return userInstance.getServiceUri(this, URL_PARAMETERS, new String[]{imageId});
@@ -164,6 +167,7 @@ implements Service {
     /**
      * @see nextapp.echo.webcontainer.Service#service(nextapp.echo.webcontainer.Connection)
      */
+    @Override
     public void service(Connection conn)
     throws IOException {
         UserInstance userInstance = (UserInstance) conn.getUserInstance();
