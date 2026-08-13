@@ -910,8 +910,7 @@ Echo.Client.DefaultOutdatedBrowserWarning = Core.extend(Echo.Client.OutdatedBrow
         if (client.configuration && client.configuration["OutdatedBrowserWarning.Text"]) {
             this._div.innerHTML = client.configuration["OutdatedBrowserWarning.Text"];
         } else {
-            this._div.innerHTML = 'You are using an outdated browser. Please update to a more recent version: ' +
-                '<a href="http://whatbrowser.org">http://whatbrowser.org</a> ';
+            this._div.innerHTML = 'You are using an outdated browser. Please update to a more recent version';
         }
 
         if (client.configuration && client.configuration["OutdatedBrowserWarning.CloseText"]) {
